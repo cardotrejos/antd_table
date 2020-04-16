@@ -1,15 +1,13 @@
-import React from 'react';
-import { Counter } from './features/counter/Counter';
+import React, {Component} from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <Counter />
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+    return (
+      <div className="App">
+        <h1>Summation of all fuels used for electricity generation</h1>
+      </div>
+    );
+  }
 }
-
 export default App;
