@@ -17,6 +17,18 @@ const DataPage = () => {
   const renderData = () => {
     if (loading) return <p>Cargando datos...</p>
     if (hasErrors) return <p>No se pueden mostrar los datos.</p>
+    
+    const maxmin = data.reduce((state, current) => {
+      if (!state.max || state.max < current.generate) {
+        state.max = current.generate;
+      }
+    
+      if (!state.min || state.min > current.generate) {
+        state.min = current.generate;
+      }
+    
+      return state;
+    }, { min: null, max: null });
   
   const columns = [
     {
@@ -34,24 +46,34 @@ const DataPage = () => {
       title: 'Unidades',
       dataIndex: 'unit',
     }];
-    
-    function onChange(sorter) {
-    }
+    console.log(maxmin)
+    const getRowClassNames = (row, index) => {
+      const classes = [];
+      
+      if (row.generate === maxmin.min) {
+        classes.push('min');
+      }
+      
+      if (row.generate === maxmin.max) {
+        classes.push('max');
+      }
 
+      return classes.join(' ');
+    }
+    
     return(
       <div>
-        <Button style={{margin:"20px"}} type="primary" onClick={fetchData}>Actualizar</Button>
+        <Button style={{margin:"20px"}} type="primary" onClick={() => dispatch(fetchData())}>Actualizar</Button>
         <Table
           rowKey="date"
-          rowClassName={() => 'editable-row'}
+          rowClassName={getRowClassNames}
           bordered
           dataSource={data}
           columns={columns}
-          onChange={onChange}
         />
-      </div>
-  )
-}
+      </div>  
+    )
+  }
 
   return (
     <section>
